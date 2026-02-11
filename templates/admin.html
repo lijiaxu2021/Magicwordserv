@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MagicWord Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #1a73e8; border-bottom: 2px solid #f0f2f5; padding-bottom: 10px; }
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: bold; color: #333; }
+        input[type="text"], input[type="file"] { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        .btn { padding: 10px 20px; background: #1a73e8; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        .btn:hover { background: #1557b0; }
+        .logout { float: right; color: #666; text-decoration: none; }
+        .message { background: #e8f0fe; color: #1a73e8; padding: 10px; border-radius: 4px; margin-bottom: 20px; }
+        .error { background: #fce8e6; color: #c5221f; padding: 10px; border-radius: 4px; margin-bottom: 20px; }
+        .info { font-size: 0.9em; color: #666; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/logout" class="logout">Logout</a>
+        <h1>Admin Configuration</h1>
+        
+        {% if message %}
+            <div class="message">{{ message }}</div>
+        {% endif %}
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>AI API Key</label>
+                <input type="text" name="api_key" value="{{ config.api_key }}" placeholder="sk-..." required>
+                <div class="info">The API Key for SiliconFlow/OpenAI compatible service.</div>
+            </div>
+
+            <div class="form-group">
+                <label>Model Name</label>
+                <input type="text" name="model_name" value="{{ config.model_name }}" required>
+                <div class="info">e.g., Qwen/Qwen2.5-7B-Instruct</div>
+            </div>
+
+            <div class="form-group">
+                <label>Default Library Package (JSON)</label>
+                <input type="file" name="library_file" accept=".json">
+                <div class="info">Upload a MagicWord export JSON file to set as default library. Current size: {{ config.default_library_content|length }} items/libs.</div>
+            </div>
+
+            <button type="submit" class="btn">Save Configuration</button>
+        </form>
+    </div>
+</body>
+</html>
