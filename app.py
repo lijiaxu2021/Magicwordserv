@@ -78,10 +78,24 @@ def logout():
 @app.route('/api/init-config', methods=['GET'])
 def get_init_config():
     config = load_config()
+    lib_content = config.get('default_library_content', [])
+    
+    # Ensure default_library is a list
+    if isinstance(lib_content, dict):
+        # Heuristic: return the first list found in values, or empty
+        found = False
+        for val in lib_content.values():
+            if isinstance(val, list):
+                lib_content = val
+                found = True
+                break
+        if not found:
+            lib_content = []
+            
     return jsonify({
         'api_key': config.get('api_key', ''),
         'model_name': config.get('model_name', ''),
-        'default_library': config.get('default_library_content', [])
+        'default_library': lib_content
     })
 
 if __name__ == '__main__':
